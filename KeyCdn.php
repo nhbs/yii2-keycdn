@@ -3,34 +3,89 @@
 namespace sammaye\keycdn;
 
 use Yii;
+use yii\base\Exception;
 use yii\base\Component;
-
-include Yii::getAlias('@vendor') . '/keycdn/keycdn-api/src/KeyCDN.php';
+use GuzzleHttp\Client;
 
 class KeyCdn extends Component
 {
+    public $endpoint = 'https://api.keycdn.com';
+    
     public $apiKey;
-
+    
     private $_client;
-    
-    public function getClient()
+
+    public function init()
     {
-        $this->_client = new KeyCDN($this->apiKey);
+        $this->_client = new Client();
+        return parent::init();
     }
 
-    public function __get($k)
+    public function get($action, $params = [])
     {
-        if(property_exists($this->getClient(), $k)){
-            return $this->getClient()->$k;    
-        }
-        return $this->$k;
+        return $this->execute('GET', $action, $params);
     }
     
-    public function __call($name, $params)
+    public function post($action, $params = [])
     {
-        if(!method_exists($this->getClient(), $name)){
-			return parent::__call($name, $params);
-		}
-		return call_user_func_array(array($this->getClient(), $name), $params);
+        return $this->execute('POST', $action, $params);
+    }
+    
+    public function put($action, $params = [])
+    {
+        return $this->execute('PUT', $action, $params);
+    }
+    
+    public function delete($action, $params = [])
+    {
+        return $this->execute('DELETE', $action, ['json' => $params]);
+    }
+    
+    public function execute($method, $action, $params = [])
+    {
+        $ro = [
+            'headers',
+            'body',
+            'json',
+            'query',
+            'auth'
+        ];
+        
+        $isOptions = false;
+        foreach($ro as $o){
+            if(isset($params[$o])){
+                $isOptions = true;
+            }
+        }
+        
+        if(!$isOptions){
+            $params = ['query' => $params];
+        }
+        
+        $res = $this
+            ->_client
+            ->request(
+                $method, 
+                $this->endpoint . '/' . $action, 
+                array_merge(
+                    ['auth' => [$this->apiKey, '']], 
+                    $params
+                )
+            );
+        
+        // If it is not 200 Guzzle itself has exception hanndling
+        //echo $res->getStatusCode();
+        // "200"
+
+        $body = json_decode($res->getBody());
+        if($body){
+            if($body->status === 'error'){
+                throw new Exception('KeyCDN encountered an error: ' . print_r(json_encode($body), true));    
+            }else{
+                return true;
+            }
+        }else{
+            throw new Exception('KeyCDN response was malformed: ' . print_r(json_encode($body), true));
+        }
     }
 }
