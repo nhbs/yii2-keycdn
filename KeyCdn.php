@@ -82,7 +82,7 @@ class KeyCdn extends Component
             if($body->status === 'error'){
                 throw new Exception('KeyCDN encountered an error: ' . print_r(json_encode($body), true));    
             }else{
-                return true;
+                return $body;
             }
         }else{
             throw new Exception('KeyCDN response was malformed: ' . print_r(json_encode($body), true));

@@ -5,19 +5,12 @@ A Yii2 extension for some KeyCDN lovin' that's so simple even your dog will be a
 
 Here is the full definition, from an example:
 
-    'rackspace' => [
-    	'class' => 'sammaye\rackspace\Rackspace',
-    	'identityEndpoint' => 'US_IDENTITY_ENDPOINT',
-    	'username' => 'SomeNotSoAwesomeUser',
-    	'apiKey' => 'AwesomeKeyInit'
-    ],
+	'keycdn' => [
+		'class' => 'sammaye\keycdn\KeyCdn',
+		'apiKey' => 'your_api_key'
+	]
     
-Everything is quite self explanatory except for `identityEndpoint`. This is a string representation of the constant name.
-
-At the time of writing there are currently two values for the `identityEndpoint` option:
-
-- `US_IDENTITY_ENDPOINT`
-- `UK_IDENTITY_ENDPOINT`
+Everything is quite self explanatory.
 
 These directly relate to the SDK's own.
 
