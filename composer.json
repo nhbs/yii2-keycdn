@@ -11,7 +11,7 @@
         }
     ],
 	"require": {
-        "keycdn/keycdn-api": "dev-master"
+        "guzzlehttp/guzzle": "6.*"
 	},
     "autoload": {
         "psr-4": { "sammaye\\keycdn\\": "" }
