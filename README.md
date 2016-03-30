@@ -1,5 +1,5 @@
 # yii2-keycdn
-A Yii2 extension for some KeyCDN lovin' that's so simple even your dog will be able to use it.
+A Yii2 extension for some KeyCDN lovin' that's so simple even your cat will be able to use it.
 
 ## Defining the Extension
 
@@ -10,17 +10,40 @@ Here is the full definition, from an example:
 		'apiKey' => 'your_api_key'
 	]
     
-Everything is quite self explanatory.
+## Using It
+    
+Everything is quite self explanatory. Let's dive straight in and use this sucker with examples.
 
-These directly relate to the SDK's own.
+### Example 1: `GET` zones
 
-Now with this definition you can just use the API like the component doesn't even exist, for example:
+    var_dump(Yii::$app->keycdn->get('zones.json'));
 
-    $cdn = Yii::$app->rackspace->cdnService();
-    var_dump($cdn->listServices());
+### Example 2: `DELETE` `purgezone` by URL
+
+    var_dump(Yii::$app->keycdn->delete(
+        'zones/purgeurl/xxx.json', 
+        [
+            'urls' => 
+            [
+                'xxx-111.kxcdn.com/css/all-e007231ec83260807e00650a0c274b86.css'
+            ]
+        ]
+    ));
+    
+### Responses
+
+Responses are raw, converted from JSON to the `stdClass` primative in PHP, for example: here is the response from `purgeurl`:
+
+    object(stdClass)[194]
+      public 'status' => string 'success' (length=7)
+      public 'description' => string 'Cache has been cleared for URL(s).' (length=34)
+      
+### Errors
+
+The extension will throw a `yii\base\Exception` when the body of the response cannot be decoded from JSON or if the JSON field `status` is `error`.
     
 ## Links
 
-- [Issue Tracker](https://github.com/Sammaye/yii2-rackspace/issues)
-- [Github](https://github.com/Sammaye/yii2-rackspace)
-- [Packagist](https://packagist.org/packages/sammaye/yii2-rackspace)
+- [Issue Tracker](https://github.com/Sammaye/yii2-keycdn/issues)
+- [Github](https://github.com/Sammaye/yii2-keycdn)
+- [Packagist](https://packagist.org/packages/sammaye/yii2-keycdn)
