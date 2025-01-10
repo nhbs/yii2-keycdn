@@ -10,9 +10,9 @@
             "homepage": "http://sammaye.wordpress.com"
         }
     ],
-	"require": {
-        "guzzlehttp/guzzle": "6.*"
-	},
+    "require": {
+        "guzzlehttp/guzzle": "^7.9"
+    },
     "autoload": {
         "psr-4": { "sammaye\\keycdn\\": "" }
     }
